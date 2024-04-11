@@ -167,6 +167,4 @@ model.add(Dense(gestures.shape[0], activation="softmax"))
 model.compile(optimizer="Adam", loss="categorical_crossentropy", metrics=["categorical_accuracy"])
 model.fit(x_train, y_train, epochs=1000, callbacks=[tensor_board_callback])
 
-model.predict(x_test)
-model.summary()
-
+# model.predict(x_test)
