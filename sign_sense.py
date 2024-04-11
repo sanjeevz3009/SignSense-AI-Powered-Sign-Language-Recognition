@@ -23,16 +23,29 @@ def mediapipe_detection(image, model):
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     return image, results
 
-def draw_landmarks(image, results):
+def draw_landmarks_custom(image, results):
     # Draw face landmarks
     # Can use FACEMESH_CONTOURS or FACEMESH_TESSELATION
-    mediapipe_draw.draw_landmarks(image, results.face_landmarks, mediapipe_holistic.FACEMESH_CONTOURS)
+    # Make the colour customisations as variables so it can be adjusted
+    mediapipe_draw.draw_landmarks(image, results.face_landmarks, mediapipe_holistic.FACEMESH_CONTOURS,
+                                  mediapipe_draw.DrawingSpec(color=(80, 110, 10), thickness=1, circle_radius=1),
+                                  mediapipe_draw.DrawingSpec(color=(80, 256, 121), thickness=1, circle_radius=1)
+                                  )
     # Draw left hand landmarks
-    mediapipe_draw.draw_landmarks(image, results.left_hand_landmarks, mediapipe_holistic.HAND_CONNECTIONS)
+    mediapipe_draw.draw_landmarks(image, results.left_hand_landmarks, mediapipe_holistic.HAND_CONNECTIONS,
+                                  mediapipe_draw.DrawingSpec(color=(80, 22, 10), thickness=1, circle_radius=1),
+                                  mediapipe_draw.DrawingSpec(color=(80, 44, 121), thickness=1, circle_radius=1)
+                                  )
     # Draw right hand landmarks
-    mediapipe_draw.draw_landmarks(image, results.right_hand_landmarks, mediapipe_holistic.HAND_CONNECTIONS)
+    mediapipe_draw.draw_landmarks(image, results.right_hand_landmarks, mediapipe_holistic.HAND_CONNECTIONS,
+                                  mediapipe_draw.DrawingSpec(color=(121, 22, 76), thickness=1, circle_radius=1),
+                                  mediapipe_draw.DrawingSpec(color=(121, 44, 250), thickness=1, circle_radius=1)
+                                  )
     # Draw pose landmarks
-    mediapipe_draw.draw_landmarks(image, results.pose_landmarks, mediapipe_holistic.POSE_CONNECTIONS)
+    mediapipe_draw.draw_landmarks(image, results.pose_landmarks, mediapipe_holistic.POSE_CONNECTIONS,
+                                  mediapipe_draw.DrawingSpec(color=(245, 117, 66), thickness=1, circle_radius=1),
+                                  mediapipe_draw.DrawingSpec(color=(245, 66, 230), thickness=1, circle_radius=1)
+                                  )
 
     return image
 
@@ -47,7 +60,7 @@ with mediapipe_holistic.Holistic(min_detection_confidence=0.5, min_tracking_conf
         print(results)
 
         # Draw landmarks
-        image = draw_landmarks(image, results)
+        image = draw_landmarks_custom(image, results)
 
         cv2.imshow("Feed", image)
         if cv2.waitKey(1) == ord("q"):
