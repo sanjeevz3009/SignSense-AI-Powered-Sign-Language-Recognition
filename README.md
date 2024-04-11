@@ -1,1 +1,1 @@
-# SignSense AI Powered Sign Language Recognition and Learning Application
+# SignSense: AI Powered Sign Language Recognition and Learning Application
