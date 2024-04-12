@@ -75,12 +75,32 @@ def prob_visualation(res, actions, input_frame, colors):
         
     return output_frame
 
+# # Extracting key points
+# def extract_landmarks(results):
+#     face = np.array([[result.x, result.y, result.z] for result in results.face_landmarks.landmark]).flatten() if results.face_landmarks else np.zeros(1404)
+#     left_hand_landmark = np.array([[result.x, result.y, result.z] for result in results.left_hand_landmarks.landmark]).flatten() if results.left_hand_landmarks else np.zeros(21*3)
+#     right_hand_landmark = np.array([[result.x, result.y, result.z] for result in results.right_hand_landmarks.landmark]).flatten() if results.right_hand_landmarks else np.zeros(21*3)
+#     pose = np.array([[result.x, result.y, result.z, result.visibility] for result in results.pose_landmarks.landmark]).flatten() if results.pose_landmarks else np.zeros(132)
+    
+#     return np.concatenate([face, left_hand_landmark, right_hand_landmark, pose])
+
 # Extracting key points
 def extract_landmarks(results):
-    face = np.array([[result.x, result.y, result.z] for result in results.face_landmarks.landmark]).flatten() if results.face_landmarks else np.zeros(1404)
-    left_hand_landmark = np.array([[result.x, result.y, result.z] for result in results.left_hand_landmarks.landmark]).flatten() if results.left_hand_landmarks else np.zeros(21*3)
-    right_hand_landmark = np.array([[result.x, result.y, result.z] for result in results.right_hand_landmarks.landmark]).flatten() if results.right_hand_landmarks else np.zeros(21*3)
-    pose = np.array([[result.x, result.y, result.z, result.visibility] for result in results.pose_landmarks.landmark]).flatten() if results.pose_landmarks else np.zeros(132)
+    face = np.zeros(1404)
+    if results.face_landmarks:
+        face = np.array([[result.x, result.y, result.z] for result in results.face_landmarks.landmark]).flatten()
+    
+    left_hand_landmark = np.zeros(21*3)
+    if results.left_hand_landmarks:
+        left_hand_landmark = np.array([[result.x, result.y, result.z] for result in results.left_hand_landmarks.landmark]).flatten()
+    
+    right_hand_landmark = np.zeros(21*3)
+    if results.right_hand_landmarks:
+        right_hand_landmark = np.array([[result.x, result.y, result.z] for result in results.right_hand_landmarks.landmark]).flatten()
+    
+    pose = np.zeros(132)
+    if results.pose_landmarks:
+        pose = np.array([[result.x, result.y, result.z, result.visibility] for result in results.pose_landmarks.landmark]).flatten()
     
     return np.concatenate([face, left_hand_landmark, right_hand_landmark, pose])
 
