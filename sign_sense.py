@@ -5,6 +5,7 @@ import numpy as np
 import os
 import time
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import multilabel_confusion_matrix, accuracy_score
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
@@ -168,3 +169,15 @@ model.compile(optimizer="Adam", loss="categorical_crossentropy", metrics=["categ
 model.fit(x_train, y_train, epochs=1000, callbacks=[tensor_board_callback])
 
 # model.predict(x_test)
+
+model.save("gestures.h5")
+
+model.load_weights("gestures.h5")
+
+yhat = model.predict(x_test)
+
+ytrue = np.argmax(y_test, axis=1).toList()
+yhat = np.argmax(yhat, axis=1).toList()
+
+print(multilabel_confusion_matrix(ytrue, yhat))
+print(accuracy_score(ytrue, yhat))
