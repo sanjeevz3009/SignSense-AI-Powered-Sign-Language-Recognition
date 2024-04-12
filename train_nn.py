@@ -49,12 +49,13 @@ x = np.array(sequences)
 y = to_categorical(labels).astype(int)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.05)
+print(x_train.shape)
 
 log_location = os.path.join("Logs")
 tensor_board_callback = TensorBoard(log_dir=log_location)
 
 model = Sequential()
-model.add(LSTM(64, return_sequences=True, activation="relu", input_shape=(30, 1662)))
+model.add(LSTM(64, return_sequences=True, activation="relu", input_shape=(30, 126)))
 model.add(LSTM(128, return_sequences=True, activation="relu"))
 model.add(LSTM(64, return_sequences=False, activation="relu"))
 
@@ -67,9 +68,9 @@ model.compile(
 )
 model.fit(x_train, y_train, epochs=1000, callbacks=[tensor_board_callback])
 
-model.save("gestures_2.h5")
+model.save("gestures_3.h5")
 
-model.load_weights("gestures.h5")
+model.load_weights("gestures_3.h5")
 
 yhat = model.predict(x_test)
 

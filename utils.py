@@ -37,21 +37,21 @@ def draw_landmarks_custom(image, results):
     # Draw face landmarks
     # Can use FACEMESH_CONTOURS or FACEMESH_TESSELATION
     # Make the colour customisations as variables so it can be adjusted
-    mediapipe_draw.draw_landmarks(
-        image,
-        results.face_landmarks,
-        mediapipe_holistic.FACEMESH_CONTOURS,
-        mediapipe_draw.DrawingSpec(
-            color=landmark_line_colour,
-            thickness=face_landmark_thickness,
-            circle_radius=face_circle_radius_num,
-        ),
-        mediapipe_draw.DrawingSpec(
-            color=landmark_point_colour,
-            thickness=face_landmark_thickness,
-            circle_radius=face_circle_radius_num,
-        ),
-    )
+    # mediapipe_draw.draw_landmarks(
+    #     image,
+    #     results.face_landmarks,
+    #     mediapipe_holistic.FACEMESH_CONTOURS,
+    #     mediapipe_draw.DrawingSpec(
+    #         color=landmark_line_colour,
+    #         thickness=face_landmark_thickness,
+    #         circle_radius=face_circle_radius_num,
+    #     ),
+    #     mediapipe_draw.DrawingSpec(
+    #         color=landmark_point_colour,
+    #         thickness=face_landmark_thickness,
+    #         circle_radius=face_circle_radius_num,
+    #     ),
+    # )
     # Draw left hand landmarks
     mediapipe_draw.draw_landmarks(
         image,
@@ -85,21 +85,21 @@ def draw_landmarks_custom(image, results):
         ),
     )
     # Draw pose landmarks
-    mediapipe_draw.draw_landmarks(
-        image,
-        results.pose_landmarks,
-        mediapipe_holistic.POSE_CONNECTIONS,
-        mediapipe_draw.DrawingSpec(
-            color=landmark_line_colour,
-            thickness=pose_landmark_thickness,
-            circle_radius=pose_landmark_radius_num,
-        ),
-        mediapipe_draw.DrawingSpec(
-            color=landmark_point_colour,
-            thickness=pose_landmark_thickness,
-            circle_radius=pose_landmark_radius_num,
-        ),
-    )
+    # mediapipe_draw.draw_landmarks(
+    #     image,
+    #     results.pose_landmarks,
+    #     mediapipe_holistic.POSE_CONNECTIONS,
+    #     mediapipe_draw.DrawingSpec(
+    #         color=landmark_line_colour,
+    #         thickness=pose_landmark_thickness,
+    #         circle_radius=pose_landmark_radius_num,
+    #     ),
+    #     mediapipe_draw.DrawingSpec(
+    #         color=landmark_point_colour,
+    #         thickness=pose_landmark_thickness,
+    #         circle_radius=pose_landmark_radius_num,
+    #     ),
+    # )
 
     return image
 
@@ -133,14 +133,14 @@ def prob_visualation(res, actions, input_frame, colors):
 
 # Extracting landmark points
 def extract_landmarks(results):
-    face = np.zeros(1404)
-    if results.face_landmarks:
-        face = np.array(
-            [
-                [result.x, result.y, result.z]
-                for result in results.face_landmarks.landmark
-            ]
-        ).flatten()
+    # face = np.zeros(1404)
+    # if results.face_landmarks:
+    #     face = np.array(
+    #         [
+    #             [result.x, result.y, result.z]
+    #             for result in results.face_landmarks.landmark
+    #         ]
+    #     ).flatten()
 
     left_hand_landmark = np.zeros(21 * 3)
     if results.left_hand_landmarks:
@@ -160,16 +160,16 @@ def extract_landmarks(results):
             ]
         ).flatten()
 
-    pose = np.zeros(132)
-    if results.pose_landmarks:
-        pose = np.array(
-            [
-                [result.x, result.y, result.z, result.visibility]
-                for result in results.pose_landmarks.landmark
-            ]
-        ).flatten()
+    # pose = np.zeros(132)
+    # if results.pose_landmarks:
+    #     pose = np.array(
+    #         [
+    #             [result.x, result.y, result.z, result.visibility]
+    #             for result in results.pose_landmarks.landmark
+    #         ]
+    #     ).flatten()
 
-    return np.concatenate([face, left_hand_landmark, right_hand_landmark, pose])
+    return np.concatenate([left_hand_landmark, right_hand_landmark])
 
 
 # Path for exported data, numpy arrays

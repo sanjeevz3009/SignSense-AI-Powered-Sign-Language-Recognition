@@ -24,7 +24,7 @@ log_location = os.path.join("Logs")
 tensor_board_callback = TensorBoard(log_dir=log_location)
 
 model = Sequential()
-model.add(LSTM(64, return_sequences=True, activation="relu", input_shape=(30, 1662)))
+model.add(LSTM(64, return_sequences=True, activation="relu", input_shape=(30, 126)))
 model.add(LSTM(128, return_sequences=True, activation="relu"))
 model.add(LSTM(64, return_sequences=False, activation="relu"))
 
@@ -36,7 +36,7 @@ model.compile(
     optimizer="Adam", loss="categorical_crossentropy", metrics=["categorical_accuracy"]
 )
 
-model.load_weights("gestures.h5")
+model.load_weights("gestures_3.h5")
 
 # sequence = []
 # sentence = []
@@ -155,19 +155,31 @@ def main():
                     sentence = sentence[-5:]
 
                 # Probabilities
-                image = prob_visualation(res, gestures, image, colours)
+                # image = prob_visualation(res, gestures, image, colours)
 
             cv2.rectangle(image, (0, 0), (640, 40), (245, 117, 16), -1)
-            cv2.putText(
-                image,
-                " ".join(sentence),
-                (3, 30),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1,
-                (255, 255, 255),
-                2,
-                cv2.LINE_AA,
-            )
+            if sentence:
+                cv2.putText(
+                    image,
+                    sentence[-1],
+                    (3, 30),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    1,
+                    (255, 255, 255),
+                    2,
+                    cv2.LINE_AA,
+                )
+            else:
+                cv2.putText(
+                    image,
+                    "",
+                    (3, 30),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    1,
+                    (255, 255, 255),
+                    2,
+                    cv2.LINE_AA,
+                )
 
             frame_conversion = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             frame_placeholder.image(frame_conversion, channels="RGB")

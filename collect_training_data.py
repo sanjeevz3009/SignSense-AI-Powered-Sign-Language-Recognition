@@ -15,23 +15,12 @@ from utils import (
 # Holistic model
 mediapipe_holistic = mp.solutions.holistic
 
-# for gesture in gestures:
-#     for sequence in range(no_sequences):
-#         try:
-#             os.makedirs(os.path.join(data_location, gesture, str(sequence)))
-#         except:
-#             pass
-
 for gesture in gestures:
-    sequences = range(no_sequences)
-    try:
-        os.makedirs(
-            os.path.join(
-                data_location, gesture, *[str(sequence) for sequence in sequences]
-            )
-        )
-    except Exception as e:
-        raise Exception(f"Error creating directories: {str(e)}") from e
+    for sequence in range(no_sequences):
+        try:
+            os.makedirs(os.path.join(data_location, gesture, str(sequence)))
+        except:
+            pass
 
 
 capture = cv2.VideoCapture(0)

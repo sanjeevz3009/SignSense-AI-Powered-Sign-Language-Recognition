@@ -159,5 +159,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+mediapipe_data_0/
+mediapipe_data_2/
 mediapipe_data/
 Logs/
