@@ -13,7 +13,9 @@ from gestures_to_detect import gestures, no_sequences, sequence_length
 # Holistic model
 mediapipe_holistic = mp.solutions.holistic
 
-label_map = {label:num for num, label in enumerate(gestures)}
+label_map = {}
+for num, label in enumerate(gestures):
+    label_map[label] = num
 
 sequences, labels = [], []
 for gesture in gestures:
