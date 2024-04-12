@@ -84,7 +84,7 @@ def prob_visualation(res, actions, input_frame, colors):
     
 #     return np.concatenate([face, left_hand_landmark, right_hand_landmark, pose])
 
-# Extracting key points
+# Extracting landmark points
 def extract_landmarks(results):
     face = np.zeros(1404)
     if results.face_landmarks:
