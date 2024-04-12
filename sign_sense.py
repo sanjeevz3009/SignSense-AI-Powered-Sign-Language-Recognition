@@ -184,7 +184,17 @@ print(accuracy_score(ytrue, yhat))
 
 sequence = []
 sentence = []
-threshold = 0.4
+predictions = []
+threshold = 0.95
+
+colors = [(245,117,16), (117,245,16), (16,117,245)]
+def prob_visualation(res, actions, input_frame, colors):
+    output_frame = input_frame.copy()
+    for num, prob in enumerate(res):
+        cv2.rectangle(output_frame, (0,60+num*40), (int(prob*100), 90+num*40), colors[num], -1)
+        cv2.putText(output_frame, actions[num], (0, 85+num*40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
+        
+    return output_frame
 
 capture = cv2.VideoCapture(0)
 # Access/ set media pipe mode
@@ -200,30 +210,37 @@ with mediapipe_holistic.Holistic(min_detection_confidence=0.5, min_tracking_conf
         image = draw_landmarks_custom(image, results)
 
         get_key_points = extract_landmarks(results)
-        sequence.insert(0, get_key_points)
-        sequence = sequence[:30]
+        sequence.append(get_key_points)
+        sequence = sequence[-30:]
 
+        # Prediction logic
         if len(sequence) == 30:
-            result = model.predict(np.expand_dims(sequence, axis=0))[0]
-            print(result)
-            print(gestures[np.argmax(result)])
-
-        if result[np.argmax(result)] > threshold:
-            if len(sentence) > 0:
-                if gestures[np.argmax(result)] != sentence[-1]:
-                    sentence.append(gestures[np.argmax(result)])
-            else:
-                sentence.append(gestures[np.argmax(result)])
+            res = model.predict(np.expand_dims(sequence, axis=0))[0]
+            print(gestures[np.argmax(res)])
+            predictions.append(np.argmax(res))
             
-        if len(sentence) > 5:
-            sentence = sentence[-5:]
+        # Visualation logic
+            if np.unique(predictions[-10:])[0] == np.argmax(res): 
+                if res[np.argmax(res)] > threshold: 
+                    if len(sentence) > 0: 
+                        if gestures[np.argmax(res)] != sentence[-1]:
+                            sentence.append(gestures[np.argmax(res)])
+                    else:
+                        sentence.append(gestures[np.argmax(res)])
 
-        cv2.rectangle(image, (0, 0), (640, 40), (245, 117, 16), -1)
-        cv2.putText(image, " ".join(sentence), (3,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), cv2.LINE_AA) 
+            if len(sentence) > 5: 
+                sentence = sentence[-5:]
 
-        cv2.imshow("Feed", image)
-        if cv2.waitKey(1) == ord("q"):
+            # Probabilities
+            image = prob_visualation(res, gestures, image, colors)
+            
+        cv2.rectangle(image, (0,0), (640, 40), (245, 117, 16), -1)
+        cv2.putText(image, ' '.join(sentence), (3,30), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+        
+        cv2.imshow('Feed', image)
+
+        if cv2.waitKey(10) & 0xFF == ord('q'):
             break
-
     capture.release()
     cv2.destroyAllWindows()
