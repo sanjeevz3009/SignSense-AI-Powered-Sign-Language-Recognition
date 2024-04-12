@@ -3,6 +3,15 @@ import mediapipe as mp
 import numpy as np
 import os
 
+hand_landmark_thickness = 2
+hand_circle_radius_num = 2
+face_landmark_thickness = 1
+face_circle_radius_num = 1
+pose_landmark_thickness = 1
+pose_landmark_radius_num = 1
+landmark_line_colour = (0, 255, 8)
+landmark_point_colour = (255, 0, 200)
+
 # Holistic model
 mediapipe_holistic = mp.solutions.holistic
 # Drawing utilities
@@ -27,23 +36,31 @@ def draw_landmarks_custom(image, results):
     # Can use FACEMESH_CONTOURS or FACEMESH_TESSELATION
     # Make the colour customisations as variables so it can be adjusted
     mediapipe_draw.draw_landmarks(image, results.face_landmarks, mediapipe_holistic.FACEMESH_CONTOURS,
-                                  mediapipe_draw.DrawingSpec(color=(80, 110, 10), thickness=1, circle_radius=1),
-                                  mediapipe_draw.DrawingSpec(color=(80, 256, 121), thickness=1, circle_radius=1)
+                                  mediapipe_draw.DrawingSpec(color=landmark_line_colour, thickness=face_landmark_thickness,
+                                                             circle_radius=face_circle_radius_num),
+                                  mediapipe_draw.DrawingSpec(color=landmark_point_colour, thickness=face_landmark_thickness,
+                                                             circle_radius=face_circle_radius_num)
                                   )
     # Draw left hand landmarks
     mediapipe_draw.draw_landmarks(image, results.left_hand_landmarks, mediapipe_holistic.HAND_CONNECTIONS,
-                                  mediapipe_draw.DrawingSpec(color=(80, 22, 10), thickness=1, circle_radius=1),
-                                  mediapipe_draw.DrawingSpec(color=(80, 44, 121), thickness=1, circle_radius=1)
+                                  mediapipe_draw.DrawingSpec(color=landmark_line_colour, thickness=hand_landmark_thickness,
+                                                             circle_radius=hand_circle_radius_num),
+                                  mediapipe_draw.DrawingSpec(color=landmark_point_colour, thickness=hand_landmark_thickness,
+                                                             circle_radius=hand_circle_radius_num)
                                   )
     # Draw right hand landmarks
     mediapipe_draw.draw_landmarks(image, results.right_hand_landmarks, mediapipe_holistic.HAND_CONNECTIONS,
-                                  mediapipe_draw.DrawingSpec(color=(121, 22, 76), thickness=1, circle_radius=1),
-                                  mediapipe_draw.DrawingSpec(color=(121, 44, 250), thickness=1, circle_radius=1)
+                                  mediapipe_draw.DrawingSpec(color=landmark_line_colour, thickness=hand_landmark_thickness,
+                                                             circle_radius=hand_circle_radius_num),
+                                  mediapipe_draw.DrawingSpec(color=landmark_point_colour, thickness=hand_landmark_thickness,
+                                                             circle_radius=hand_circle_radius_num)
                                   )
     # Draw pose landmarks
     mediapipe_draw.draw_landmarks(image, results.pose_landmarks, mediapipe_holistic.POSE_CONNECTIONS,
-                                  mediapipe_draw.DrawingSpec(color=(245, 117, 66), thickness=1, circle_radius=1),
-                                  mediapipe_draw.DrawingSpec(color=(245, 66, 230), thickness=1, circle_radius=1)
+                                  mediapipe_draw.DrawingSpec(color=landmark_line_colour, thickness=pose_landmark_thickness,
+                                                             circle_radius=pose_landmark_radius_num),
+                                  mediapipe_draw.DrawingSpec(color=landmark_point_colour, thickness=pose_landmark_thickness,
+                                                             circle_radius=pose_landmark_radius_num)
                                   )
     
     return image
