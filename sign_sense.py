@@ -172,37 +172,37 @@ model.fit(x_train, y_train, epochs=1000, callbacks=[tensor_board_callback])
 
 model.save("gestures.h5")
 
-model.load_weights("gestures.h5")
+# model.load_weights("gestures.h5")
 
-yhat = model.predict(x_test)
+# yhat = model.predict(x_test)
 
-ytrue = np.argmax(y_test, axis=1).toList()
-yhat = np.argmax(yhat, axis=1).toList()
+# ytrue = np.argmax(y_test, axis=1).tolist()
+# yhat = np.argmax(yhat, axis=1).tolist()
 
-print(multilabel_confusion_matrix(ytrue, yhat))
-print(accuracy_score(ytrue, yhat))
+# print(multilabel_confusion_matrix(ytrue, yhat))
+# print(accuracy_score(ytrue, yhat))
 
 
-sequence = []
-sentence = []
-threshold = 0.4
+# sequence = []
+# sentence = []
+# threshold = 0.4
 
-capture = cv2.VideoCapture(0)
-# Access/ set media pipe mode
-with mediapipe_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
-    while capture.isOpened():
-        ret, frame = capture.read()
+# capture = cv2.VideoCapture(0)
+# # Access/ set media pipe mode
+# with mediapipe_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
+#     while capture.isOpened():
+#         ret, frame = capture.read()
 
-        # Make detections
-        image, results = mediapipe_detection(frame, holistic)
-        print(results)
+#         # Make detections
+#         image, results = mediapipe_detection(frame, holistic)
+#         print(results)
 
-        # Draw landmarks
-        image = draw_landmarks_custom(image, results)
+#         # Draw landmarks
+#         image = draw_landmarks_custom(image, results)
 
-        cv2.imshow("Feed", image)
-        if cv2.waitKey(1) == ord("q"):
-            break
+#         cv2.imshow("Feed", image)
+#         if cv2.waitKey(1) == ord("q"):
+#             break
 
-    capture.release()
-    cv2.destroyAllWindows()
+#     capture.release()
+#     cv2.destroyAllWindows()
