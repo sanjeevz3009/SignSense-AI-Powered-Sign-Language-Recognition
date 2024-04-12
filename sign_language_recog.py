@@ -5,7 +5,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 from tensorflow.keras.callbacks import TensorBoard
 import mediapipe as mp
-from utils import mediapipe_detection, draw_landmarks_custom, extract_landmarks, prob_visualation, colours, data_location
+from utils import mediapipe_detection, draw_landmarks_custom, extract_landmarks, prob_visualation, colours
 from gestures_to_detect import gestures
 
 # Holistic model

@@ -2,26 +2,26 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import os
-from utils import draw_landmarks_custom, extract_landmarks, mediapipe_detection
+from utils import draw_landmarks_custom, extract_landmarks, mediapipe_detection, data_location
+from gestures_to_detect import gestures, no_sequences, sequence_length
 
 # Holistic model
 mediapipe_holistic = mp.solutions.holistic
 
-# Path for exported data, numpy arrays
-data_location = os.path.join("mediapipe_data")
-
-# Actions/ sign language gestures to detect
-# gestures = np.array(["Hello", "Thanks", "Iloveyou", "Good"])
-gestures = np.array(["Hello", "Iloveyou", "Good"])
-no_sequences = 30
-sequence_length = 30
+# for gesture in gestures:
+#     for sequence in range(no_sequences):
+#         try:
+#             os.makedirs(os.path.join(data_location, gesture, str(sequence)))
+#         except:
+#             pass
 
 for gesture in gestures:
-    for sequence in range(no_sequences):
-        try:
-            os.makedirs(os.path.join(data_location, gesture, str(sequence)))
-        except:
-            pass
+    sequences = range(no_sequences)
+    try:
+        os.makedirs(os.path.join(data_location, gesture, *[str(sequence) for sequence in sequences]))
+    except:
+        pass
+
 
 capture = cv2.VideoCapture(0)
 # Access/ set media pipe mode

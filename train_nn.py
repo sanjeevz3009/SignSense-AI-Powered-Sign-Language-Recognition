@@ -17,13 +17,22 @@ label_map = {}
 for num, label in enumerate(gestures):
     label_map[label] = num
 
-sequences, labels = [], []
+# sequences = []
+# labels = []
+# for gesture in gestures:
+#     for sequence in range(no_sequences):
+#         window = []
+#         for frame_count in range(sequence_length):
+#             result = np.load(os.path.join(data_location, gesture, str(sequence), f"{frame_count}.npy"))
+#             window.append(result)
+#         sequences.append(window)
+#         labels.append(label_map[gesture])
+
+sequences = []
+labels = []
 for gesture in gestures:
     for sequence in range(no_sequences):
-        window = []
-        for frame_count in range(sequence_length):
-            result = np.load(os.path.join(data_location, gesture, str(sequence), f"{frame_count}.npy"))
-            window.append(result)
+        window = [np.load(os.path.join(data_location, gesture, str(sequence), f"{frame_count}.npy")) for frame_count in range(sequence_length)]
         sequences.append(window)
         labels.append(label_map[gesture])
 
