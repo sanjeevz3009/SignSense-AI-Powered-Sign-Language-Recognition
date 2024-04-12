@@ -76,7 +76,8 @@ with mediapipe_holistic.Holistic(min_detection_confidence=0.5, min_tracking_conf
         
         cv2.imshow('Feed', image)
 
-        if cv2.waitKey(10) & 0xFF == ord('q'):
+        if cv2.waitKey(1) == ord("q"):
             break
+
     capture.release()
     cv2.destroyAllWindows()
