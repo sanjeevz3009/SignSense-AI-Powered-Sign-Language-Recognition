@@ -170,14 +170,14 @@ model.fit(x_train, y_train, epochs=1000, callbacks=[tensor_board_callback])
 
 # model.predict(x_test)
 
-# model.save("gestures.h5")
+model.save("gestures.h5")
 
-# model.load_weights("gestures.h5")
+model.load_weights("gestures.h5")
 
-# yhat = model.predict(x_test)
+yhat = model.predict(x_test)
 
-# ytrue = np.argmax(y_test, axis=1).toList()
-# yhat = np.argmax(yhat, axis=1).toList()
+ytrue = np.argmax(y_test, axis=1).toList()
+yhat = np.argmax(yhat, axis=1).toList()
 
-# print(multilabel_confusion_matrix(ytrue, yhat))
-# print(accuracy_score(ytrue, yhat))
+print(multilabel_confusion_matrix(ytrue, yhat))
+print(accuracy_score(ytrue, yhat))
