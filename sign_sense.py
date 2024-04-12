@@ -83,7 +83,7 @@ def extract_landmarks(results):
     return np.concatenate([face, left_hand_landmark, right_hand_landmark, pose])
 
 # Path for exported data, numpy arrays
-data_location = os.path.join("mediapipe_training_data")
+data_location = os.path.join("mediapipe_data")
 
 # Actions/ sign language gestures to detect
 # gestures = np.array(["Hello", "Thanks", "Iloveyou", "Good"])
@@ -181,3 +181,28 @@ yhat = np.argmax(yhat, axis=1).toList()
 
 print(multilabel_confusion_matrix(ytrue, yhat))
 print(accuracy_score(ytrue, yhat))
+
+
+sequence = []
+sentence = []
+threshold = 0.4
+
+capture = cv2.VideoCapture(0)
+# Access/ set media pipe mode
+with mediapipe_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
+    while capture.isOpened():
+        ret, frame = capture.read()
+
+        # Make detections
+        image, results = mediapipe_detection(frame, holistic)
+        print(results)
+
+        # Draw landmarks
+        image = draw_landmarks_custom(image, results)
+
+        cv2.imshow("Feed", image)
+        if cv2.waitKey(1) == ord("q"):
+            break
+
+    capture.release()
+    cv2.destroyAllWindows()
