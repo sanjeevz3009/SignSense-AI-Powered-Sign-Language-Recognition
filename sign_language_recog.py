@@ -12,19 +12,13 @@ import numpy as np
 import streamlit as st
 
 # For defining and training neural network models
-from tensorflow.keras.callbacks import TensorBoard
 from tensorflow.keras.layers import LSTM, Dense
 from tensorflow.keras.models import Sequential
 
 # Custom modules are imported which contain predefined gestures to detect
 # and utility functions for data handling and visualisation
 from gestures_to_detect import gestures
-from utils import (
-    draw_landmarks_custom,
-    extract_landmarks,
-    mediapipe_detection,
-    prob_visualisation,
-)
+from utils import draw_landmarks_custom, extract_landmarks, mediapipe_detection
 
 # Constants
 # These constants define minimum confidence thresholds for detection and tracking
