@@ -1,19 +1,23 @@
 # OpenCV library for computer vision tasks
 import cv2
+
 # MediaPipe library for various media processing tasks, including pose estimation,
-# hand tracking etc
+# hand tracking etc
 import mediapipe as mp
+
 # For numerical computations
 import numpy as np
+
+# For building interactive web applications
+import streamlit as st
+
 # For defining and training neural network models
 from tensorflow.keras.callbacks import TensorBoard
 from tensorflow.keras.layers import LSTM, Dense
 from tensorflow.keras.models import Sequential
-# For building interactive web applications
-import streamlit as st
 
 # Custom modules are imported which contain predefined gestures to detect
-# and utility functions for data handling and visualisation
+# and utility functions for data handling and visualisation
 from gestures_to_detect import gestures
 from utils import (
     draw_landmarks_custom,
@@ -35,16 +39,23 @@ mediapipe_holistic = mp.solutions.holistic
 
 # Load pre-trained model
 # A pre-trained LSTM neural network model is defined and loaded
-model = Sequential([
-    LSTM(64, return_sequences=True, activation="relu", input_shape=MODEL_INPUT_SHAPE),
-    LSTM(128, return_sequences=True, activation="relu"),
-    LSTM(64, return_sequences=False, activation="relu"),
-    Dense(64, activation="relu"),
-    Dense(32, activation="relu"),
-    Dense(gestures.shape[0], activation="softmax")
-])
-model.compile(optimizer="Adam", loss="categorical_crossentropy", metrics=["categorical_accuracy"])
-model.load_weights("gestures_3.h5")
+model = Sequential(
+    [
+        LSTM(
+            64, return_sequences=True, activation="relu", input_shape=MODEL_INPUT_SHAPE
+        ),
+        LSTM(128, return_sequences=True, activation="relu"),
+        LSTM(64, return_sequences=False, activation="relu"),
+        Dense(64, activation="relu"),
+        Dense(32, activation="relu"),
+        Dense(gestures.shape[0], activation="softmax"),
+    ]
+)
+model.compile(
+    optimizer="Adam", loss="categorical_crossentropy", metrics=["categorical_accuracy"]
+)
+model.load_weights("gestures_4.h5")
+
 
 def main():
     """
@@ -75,7 +86,7 @@ def main():
     # Hand gesture detection setup
     with mediapipe_holistic.Holistic(
         min_detection_confidence=MIN_DETECTION_CONFIDENCE,
-        min_tracking_confidence=MIN_TRACKING_CONFIDENCE
+        min_tracking_confidence=MIN_TRACKING_CONFIDENCE,
     ) as holistic:
         while capture.isOpened() and not stop_button_pressed:
             ret, frame = capture.read()
@@ -87,7 +98,9 @@ def main():
             image, results = process_frame(frame, holistic)
             sequence = update_sequence(sequence, results)
             predictions = update_predictions(sequence, predictions)
-            sentence = update_sentence(predictions, sequence, sentence, gestures, threshold)
+            sentence = update_sentence(
+                predictions, sequence, sentence, gestures, threshold
+            )
 
             # Display results
             display_results(image, sentence, frame_placeholder, gesture_text)
@@ -99,15 +112,17 @@ def main():
     capture.release()
     cv2.destroyAllWindows()
 
+
 def process_frame(frame, holistic):
     """
     Process each frame for hand gesture detection.
-    This function processes each frame for hand gesture detection using 
+    This function processes each frame for hand gesture detection using
     the MediaPipe library.
     """
     image, results = mediapipe_detection(frame, holistic)
     image = draw_landmarks_custom(image, results)
     return image, results
+
 
 def update_sequence(sequence, results):
     """
@@ -119,12 +134,14 @@ def update_sequence(sequence, results):
     sequence.append(get_key_points)
     return sequence[-30:]
 
+
 def update_predictions(sequence, predictions):
     """Update the predictions based on the sequence."""
     if len(sequence) == 30:
         res = model.predict(np.expand_dims(sequence, axis=0))[0]
         predictions.append(np.argmax(res))
     return predictions
+
 
 def update_sentence(predictions, sequence, sentence, gestures, threshold):
     """
@@ -170,6 +187,7 @@ def update_sentence(predictions, sequence, sentence, gestures, threshold):
 
     return sentence  # Return updated sentence
 
+
 def display_results(image, sentence, frame_placeholder, gesture_text):
     """
     Display results in the Streamlit interface.
@@ -183,9 +201,10 @@ def display_results(image, sentence, frame_placeholder, gesture_text):
     else:
         gesture_text.empty()
 
-# This script sets up a real-time sign language recognition system
+
+# This script sets up a real-time sign language recognition system
 # that captures video feed, processes frames for hand gesture detection,
-# predicts gestures using a pre-trained LSTM model,
-# and displays results interactively using Streamlit.
+# predicts gestures using a pre-trained LSTM model,
+# and displays results interactively using Streamlit.
 if __name__ == "__main__":
     main()
