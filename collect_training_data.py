@@ -65,7 +65,7 @@ with mediapipe_holistic.Holistic(
                         cv2.LINE_AA,
                     )
                     cv2.imshow("Feed", image)
-                    cv2.waitKey(2000)
+                    cv2.waitKey(3000)
                 else:
                     cv2.putText(
                         image,

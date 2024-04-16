@@ -107,6 +107,7 @@ model.load_weights("gestures_3.h5")
 def main():
     st.title("Sign Language Recognition")
     frame_placeholder = st.empty()
+    gesture_text = st.empty()
     stop_button_pressed = st.button("Stop")
 
     sequence = []
@@ -127,7 +128,7 @@ def main():
 
             # Make detections
             image, results = mediapipe_detection(frame, holistic)
-            print(results)
+            # print(results)
 
             # Draw landmarks
             image = draw_landmarks_custom(image, results)
@@ -137,10 +138,19 @@ def main():
             sequence = sequence[-30:]
 
             # Prediction logic
+            # if len(sequence) == 30:
+            #     res = model.predict(np.expand_dims(sequence, axis=0))[0]
+            #     predicted_gesture = gestures[np.argmax(res)]
+            #     if predicted_gesture != 'None':
+            #         print(predicted_gesture)
+            #         predictions.append(np.argmax(res))
+            # print(predictions)
+            # Prediction logic
             if len(sequence) == 30:
                 res = model.predict(np.expand_dims(sequence, axis=0))[0]
-                print(gestures[np.argmax(res)])
+                # print(gestures[np.argmax(res)])
                 predictions.append(np.argmax(res))
+            # print(predictions)
 
                 # Visualation logic
                 if np.unique(predictions[-10:])[0] == np.argmax(res):
@@ -156,19 +166,20 @@ def main():
 
                 # Probabilities
                 # image = prob_visualation(res, gestures, image, colours)
-
-            cv2.rectangle(image, (0, 0), (640, 40), (245, 117, 16), -1)
+            # print(sentence)
+            # cv2.rectangle(image, (0, 0), (640, 40), (245, 117, 16), -1)
             if sentence:
-                cv2.putText(
-                    image,
-                    sentence[-1],
-                    (3, 30),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    1,
-                    (255, 255, 255),
-                    2,
-                    cv2.LINE_AA,
-                )
+                # cv2.putText(
+                #     image,
+                #     sentence[-1],
+                #     (3, 30),
+                #     cv2.FONT_HERSHEY_SIMPLEX,
+                #     1,
+                #     (255, 255, 255),
+                #     2,
+                #     cv2.LINE_AA,
+                # )
+                gesture_text.markdown(f"# {sentence[-1]}")
             else:
                 cv2.putText(
                     image,
