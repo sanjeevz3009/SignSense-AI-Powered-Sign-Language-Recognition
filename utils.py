@@ -1,113 +1,108 @@
 import os
-
 import cv2
 import mediapipe as mp
 import numpy as np
 
-hand_landmark_thickness = 2
-hand_circle_radius_num = 2
-face_landmark_thickness = 1
-face_circle_radius_num = 1
-pose_landmark_thickness = 1
-pose_landmark_radius_num = 1
-landmark_line_colour = (0, 255, 8)
-landmark_point_colour = (255, 0, 200)
+# Global constants
+# Define parameters for drawing landmarks
+HAND_LANDMARK_THICKNESS = 2
+HAND_CIRCLE_RADIUS_NUM = 2
+LANDMARK_LINE_COLOUR = (0, 255, 8)
+LANDMARK_POINT_COLOUR = (255, 0, 200)
 
 # Holistic model
-mediapipe_holistic = mp.solutions.holistic
+MEDIAPIPE_HOLISTIC = mp.solutions.holistic
 # Drawing utilities
-mediapipe_draw = mp.solutions.drawing_utils
+MEDIAPIPE_DRAW = mp.solutions.drawing_utils
 
 
 def mediapipe_detection(image, model):
-    # Colour conversion BGR to RGB
+    """
+    Perform detection on the given image using the specified model.
+    This function performs hand landmark detection on the given image using
+    the specified MediaPipe model.
+    It converts the image to RGB format, processes the detection,
+    and then converts the image back to BGR format before returning it.
+
+    Args:
+        image: Input image.
+        model: Mediapipe model for detection.
+
+    Returns:
+        image: Image with detections.
+        results: Detection results.
+    """
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    # Image will not be writeable
     image.flags.writeable = False
-    # Detecting image using media pipe/ make prediction
     results = model.process(image)
-    # Image will be writeable now
     image.flags.writeable = True
-    # Colour conversion BGR to RGB
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     return image, results
 
 
 def draw_landmarks_custom(image, results):
-    # Draw face landmarks
-    # Can use FACEMESH_CONTOURS or FACEMESH_TESSELATION
-    # Make the colour customisations as variables so it can be adjusted
-    # mediapipe_draw.draw_landmarks(
-    #     image,
-    #     results.face_landmarks,
-    #     mediapipe_holistic.FACEMESH_CONTOURS,
-    #     mediapipe_draw.DrawingSpec(
-    #         color=landmark_line_colour,
-    #         thickness=face_landmark_thickness,
-    #         circle_radius=face_circle_radius_num,
-    #     ),
-    #     mediapipe_draw.DrawingSpec(
-    #         color=landmark_point_colour,
-    #         thickness=face_landmark_thickness,
-    #         circle_radius=face_circle_radius_num,
-    #     ),
-    # )
-    # Draw left hand landmarks
-    mediapipe_draw.draw_landmarks(
+    """
+    Draw custom landmarks on the image.
+    This function draws custom landmarks (points and connections) on the image based on
+    the detection results.
+    It uses MediaPipe's drawing utilities to draw landmarks for both left and right hands.
+
+    Args:
+        image: Input image.
+        results: Detection results.
+
+    Returns:
+        image: Image with drawn landmarks.
+    """
+    MEDIAPIPE_DRAW.draw_landmarks(
         image,
         results.left_hand_landmarks,
-        mediapipe_holistic.HAND_CONNECTIONS,
-        mediapipe_draw.DrawingSpec(
-            color=landmark_line_colour,
-            thickness=hand_landmark_thickness,
-            circle_radius=hand_circle_radius_num,
+        MEDIAPIPE_HOLISTIC.HAND_CONNECTIONS,
+        MEDIAPIPE_DRAW.DrawingSpec(
+            color=LANDMARK_LINE_COLOUR,
+            thickness=HAND_LANDMARK_THICKNESS,
+            circle_radius=HAND_CIRCLE_RADIUS_NUM,
         ),
-        mediapipe_draw.DrawingSpec(
-            color=landmark_point_colour,
-            thickness=hand_landmark_thickness,
-            circle_radius=hand_circle_radius_num,
+        MEDIAPIPE_DRAW.DrawingSpec(
+            color=LANDMARK_POINT_COLOUR,
+            thickness=HAND_LANDMARK_THICKNESS,
+            circle_radius=HAND_CIRCLE_RADIUS_NUM,
         ),
     )
-    # Draw right hand landmarks
-    mediapipe_draw.draw_landmarks(
+    MEDIAPIPE_DRAW.draw_landmarks(
         image,
         results.right_hand_landmarks,
-        mediapipe_holistic.HAND_CONNECTIONS,
-        mediapipe_draw.DrawingSpec(
-            color=landmark_line_colour,
-            thickness=hand_landmark_thickness,
-            circle_radius=hand_circle_radius_num,
+        MEDIAPIPE_HOLISTIC.HAND_CONNECTIONS,
+        MEDIAPIPE_DRAW.DrawingSpec(
+            color=LANDMARK_LINE_COLOUR,
+            thickness=HAND_LANDMARK_THICKNESS,
+            circle_radius=HAND_CIRCLE_RADIUS_NUM,
         ),
-        mediapipe_draw.DrawingSpec(
-            color=landmark_point_colour,
-            thickness=hand_landmark_thickness,
-            circle_radius=hand_circle_radius_num,
+        MEDIAPIPE_DRAW.DrawingSpec(
+            color=LANDMARK_POINT_COLOUR,
+            thickness=HAND_LANDMARK_THICKNESS,
+            circle_radius=HAND_CIRCLE_RADIUS_NUM,
         ),
     )
-    # Draw pose landmarks
-    # mediapipe_draw.draw_landmarks(
-    #     image,
-    #     results.pose_landmarks,
-    #     mediapipe_holistic.POSE_CONNECTIONS,
-    #     mediapipe_draw.DrawingSpec(
-    #         color=landmark_line_colour,
-    #         thickness=pose_landmark_thickness,
-    #         circle_radius=pose_landmark_radius_num,
-    #     ),
-    #     mediapipe_draw.DrawingSpec(
-    #         color=landmark_point_colour,
-    #         thickness=pose_landmark_thickness,
-    #         circle_radius=pose_landmark_radius_num,
-    #     ),
-    # )
 
     return image
 
 
-colours = [(245, 117, 16), (117, 245, 16), (16, 117, 245)]
+def prob_visualisation(res, actions, input_frame, colors):
+    """
+    Visualise probabilities of actions.
+    This function visualises probabilities of actions on the input frame.
+    It draws rectangles proportional to the probabilities and overlays action names on them.
 
+    Args:
+        res: List of probabilities.
+        actions: List of action names.
+        input_frame: Input frame to draw on.
+        colors: List of colors.
 
-def prob_visualation(res, actions, input_frame, colors):
+    Returns:
+        output_frame: Frame with visualized probabilities.
+    """
     output_frame = input_frame.copy()
     for num, prob in enumerate(res):
         cv2.rectangle(
@@ -131,17 +126,19 @@ def prob_visualation(res, actions, input_frame, colors):
     return output_frame
 
 
-# Extracting landmark points
 def extract_landmarks(results):
-    # face = np.zeros(1404)
-    # if results.face_landmarks:
-    #     face = np.array(
-    #         [
-    #             [result.x, result.y, result.z]
-    #             for result in results.face_landmarks.landmark
-    #         ]
-    #     ).flatten()
+    """
+    Extract landmark points from the detection results.
+    This function extracts landmark points from the detection results.
+    It retrieves the coordinates of landmark points for both left and
+    right hands and flattens them into a 1D array.
 
+    Args:
+        results: Detection results.
+
+    Returns:
+        landmarks: Extracted landmark points.
+    """
     left_hand_landmark = np.zeros(21 * 3)
     if results.left_hand_landmarks:
         left_hand_landmark = np.array(
@@ -160,17 +157,12 @@ def extract_landmarks(results):
             ]
         ).flatten()
 
-    # pose = np.zeros(132)
-    # if results.pose_landmarks:
-    #     pose = np.array(
-    #         [
-    #             [result.x, result.y, result.z, result.visibility]
-    #             for result in results.pose_landmarks.landmark
-    #         ]
-    #     ).flatten()
-
     return np.concatenate([left_hand_landmark, right_hand_landmark])
 
 
 # Path for exported data, numpy arrays
+# Specifies the path for exported data, which includes numpy arrays storing hand landmark information
 data_location = os.path.join("mediapipe_data")
+
+# These utility functions are likely used in conjunction with a MediaPipe-based hand landmark
+# detection system to process and visualise hand landmarks in real-time video stream
