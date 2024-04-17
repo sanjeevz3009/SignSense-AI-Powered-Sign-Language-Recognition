@@ -29,6 +29,6 @@ def get_ice_servers():
     client = Client(account_sid, auth_token)
 
     token = client.tokens.create()
-    print(token)
+    print("Hello", token)
 
     return token.ice_servers
