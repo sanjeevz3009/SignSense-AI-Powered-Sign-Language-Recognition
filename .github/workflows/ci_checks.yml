@@ -1,0 +1,203 @@
+name: CI Checks
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 5
+      matrix:
+        python-version: [3.11.7]
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{matrix.python-version}}
+    - name: Setup poetry
+      uses: abatilo/actions-poetry@v2
+      with:
+        poetry-version: 1.7.1
+    - name: Install dependencies
+      run: poetry install --sync
+    - name: Check toml and lock file are in sync
+      run: |
+        source $(poetry env info --path)/bin/activate
+        poetry check
+    - name: Build
+      run: poetry check
+  
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 5
+      matrix:
+        python-version: [3.11.7]
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{matrix.python-version}}
+    - name: Setup poetry
+      uses: abatilo/actions-poetry@v2
+      with:
+        poetry-version: 1.7.1
+    - name: Install dependencies
+      run: poetry install --sync
+    - name: Check toml and lock file are in sync
+      run: |
+        source $(poetry env info --path)/bin/activate
+        poetry check
+    - name: Test
+      run: poetry check
+
+  black:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 5
+      matrix:
+        python-version: [3.11.7]
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{matrix.python-version}}
+    - name: Setup poetry
+      uses: abatilo/actions-poetry@v2
+      with:
+        poetry-version: 1.7.1
+    - name: Install dependencies
+      run: poetry install --sync
+    - name: Check toml and lock file are in sync
+      run: |
+        source $(poetry env info --path)/bin/activate
+        poetry check
+    - name: Run black
+      run: black --check --diff .
+
+  pylint:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 5
+      matrix:
+        python-version: [3.11.7]
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{matrix.python-version}}
+    - name: Setup poetry
+      uses: abatilo/actions-poetry@v2
+      with:
+        poetry-version: 1.7.1
+    - name: Install dependencies
+      run: poetry install --sync
+    - name: Check toml and lock file are in sync
+      run: |
+        source $(poetry env info --path)/bin/activate
+        poetry check
+    - name: Run pylint
+      run: pylint collect_training_data.py gestures_to_detect.py opencv_mp_feed.py sign_language_recog.py train_nn.py utils.py
+
+  flake8:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 5
+      matrix:
+        python-version: [3.11.7]
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{matrix.python-version}}
+    - name: Setup poetry
+      uses: abatilo/actions-poetry@v2
+      with:
+        poetry-version: 1.7.1
+    - name: Install dependencies
+      run: poetry install --sync
+    - name: Check toml and lock file are in sync
+      run: |
+        source $(poetry env info --path)/bin/activate
+        poetry check
+    - name: Run flake8
+      run: flake8 .
+
+  isort:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 5
+      matrix:
+        python-version: [3.11.7]
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{matrix.python-version}}
+    - name: Setup poetry
+      uses: abatilo/actions-poetry@v2
+      with:
+        poetry-version: 1.7.1
+    - name: Install dependencies
+      run: poetry install --sync
+    - name: Check toml and lock file are in sync
+      run: |
+        source $(poetry env info --path)/bin/activate
+        poetry check
+    - name: Run isort
+      run: isort --check-only .
+
+
+  bandit:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 5
+      matrix:
+        python-version: [3.11.7]
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{matrix.python-version}}
+    - name: Setup poetry
+      uses: abatilo/actions-poetry@v2
+      with:
+        poetry-version: 1.7.1
+    - name: Install dependencies
+      run: poetry install --sync
+    - name: Check toml and lock file are in sync
+      run: |
+        source $(poetry env info --path)/bin/activate
+        poetry check
+    - name: Run bandit
+      run: bandit -r .
+  
