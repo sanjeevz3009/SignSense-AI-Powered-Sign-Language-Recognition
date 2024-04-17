@@ -48,7 +48,7 @@ model = Sequential(
 model.compile(
     optimizer="Adam", loss="categorical_crossentropy", metrics=["categorical_accuracy"]
 )
-model.load_weights("gestures_4.h5")
+model.load_weights("gestures_3.h5")
 
 
 def main():
