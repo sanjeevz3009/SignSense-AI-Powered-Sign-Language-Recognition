@@ -1,6 +1,6 @@
 # SignSense: AI Powered Sign Language Recognition and Learning Application
 
-![Workflow Status Badge](https://github.com/github/docs/actions/workflows/ci_checks.yml/badge.svg)
+[![CI Checks](https://github.com/sanjeevz3009/SignSense-AI-Powered-Sign-Language-Recognition/actions/workflows/ci_checks.yml/badge.svg)](https://github.com/sanjeevz3009/SignSense-AI-Powered-Sign-Language-Recognition/actions/workflows/ci_checks.yml)
 
 ## Technologies used for ML here are
 
