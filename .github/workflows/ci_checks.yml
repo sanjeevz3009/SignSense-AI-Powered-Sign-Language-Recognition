@@ -90,7 +90,7 @@ jobs:
         source $(poetry env info --path)/bin/activate
         poetry check
     - name: Run black
-      run: black --check --diff .
+      run: poetry run black --check --diff .
 
   pylint:
     runs-on: ubuntu-latest
@@ -117,7 +117,7 @@ jobs:
         source $(poetry env info --path)/bin/activate
         poetry check
     - name: Run pylint
-      run: pylint collect_training_data.py gestures_to_detect.py opencv_mp_feed.py sign_language_recog.py train_nn.py utils.py
+      run: poetry run pylint collect_training_data.py gestures_to_detect.py opencv_mp_feed.py sign_language_recog.py train_nn.py utils.py
 
   flake8:
     runs-on: ubuntu-latest
@@ -144,7 +144,7 @@ jobs:
         source $(poetry env info --path)/bin/activate
         poetry check
     - name: Run flake8
-      run: flake8 .
+      run: poetry run flake8 .
 
   isort:
     runs-on: ubuntu-latest
@@ -171,7 +171,7 @@ jobs:
         source $(poetry env info --path)/bin/activate
         poetry check
     - name: Run isort
-      run: isort --check-only .
+      run: poetry run isort --check-only .
 
 
   bandit:
@@ -199,5 +199,5 @@ jobs:
         source $(poetry env info --path)/bin/activate
         poetry check
     - name: Run bandit
-      run: bandit -r .
+      run: poetry run bandit -r .
   
