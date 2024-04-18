@@ -2,8 +2,8 @@ import logging
 import os
 
 import streamlit as st
-from twilio.rest import Client
 from twilio.base.exceptions import TwilioRestException
+from twilio.rest import Client
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +29,7 @@ def get_ice_servers():
         logger.error("Failed to fetch ICE servers: %s", e)
         # Handle the error gracefully, e.g., return a default server configuration
         return [{"urls": ["stun:stun.l.google.com:19302"]}]
+
 
 # ice_servers = get_ice_servers()
 # print(ice_servers)

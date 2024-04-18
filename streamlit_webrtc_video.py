@@ -1,15 +1,17 @@
+import av
+import mediapipe as mp
 import streamlit as st
 from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
-import mediapipe as mp
-from utils import draw_landmarks_custom, mediapipe_detection
-import av
+
 from twilio_turn_server import get_ice_servers
+from utils import draw_landmarks_custom, mediapipe_detection
 
 # Holistic model
 mediapipe_holistic = mp.solutions.holistic
 st.title("Sign Language Recognition")
 gesture_text = st.empty()
 stop_button_pressed = st.button("Stop")
+
 
 class HolisticTransformer(VideoTransformerBase):
     def __init__(self):
@@ -29,8 +31,9 @@ class HolisticTransformer(VideoTransformerBase):
 
         return av.VideoFrame.from_ndarray(image, format="bgr24")
 
+
 webrtc_ctx = webrtc_streamer(
-    key="example", 
+    key="example",
     rtc_configuration={"iceServers": get_ice_servers()},
     video_transformer_factory=HolisticTransformer,
     async_transform=True,

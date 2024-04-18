@@ -20,8 +20,6 @@ from tensorflow.keras.models import Sequential
 from gestures_to_detect import gestures
 from utils import draw_landmarks_custom, extract_landmarks, mediapipe_detection
 
-from twilio_turn_server import get_ice_servers
-
 # Constants
 # These constants define minimum confidence thresholds for detection and tracking
 # model input shape, and log directory
