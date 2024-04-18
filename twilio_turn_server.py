@@ -30,3 +30,10 @@ def get_ice_servers():
     except Exception as e:
         logger.error(f"Failed to retrieve ICE servers from Twilio: {str(e)}")
         return [{"urls": ["stun:stun.l.google.com:19302"]}]  # Fallback to Google STUN server
+
+get_ice_servers()
+
+import os
+
+for key, value in os.environ.items():
+    print(f'{key}: {value}')
