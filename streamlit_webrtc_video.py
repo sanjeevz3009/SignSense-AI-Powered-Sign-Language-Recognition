@@ -3,6 +3,7 @@ from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
 import mediapipe as mp
 from utils import draw_landmarks_custom, mediapipe_detection
 import av
+from twilio_turn_server import get_ice_servers
 
 # Holistic model
 mediapipe_holistic = mp.solutions.holistic
@@ -30,6 +31,7 @@ class HolisticTransformer(VideoTransformerBase):
 
 webrtc_ctx = webrtc_streamer(
     key="example", 
+    rtc_configuration={"iceServers": get_ice_servers()},
     video_transformer_factory=HolisticTransformer,
     async_transform=True,
 )
