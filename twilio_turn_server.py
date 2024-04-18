@@ -43,5 +43,3 @@ def get_ice_servers():
         return token.ice_servers
     except TwilioRestException as e:
         print(e)
-
-get_ice_servers()
