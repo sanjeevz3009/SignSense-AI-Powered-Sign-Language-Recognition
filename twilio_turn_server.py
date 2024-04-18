@@ -15,6 +15,7 @@ def get_ice_servers():
     try:
         account_sid = os.environ["TWILIO_ACCOUNT_SID"]
         auth_token = os.environ["TWILIO_AUTH_TOKEN"]
+        print("SuccessSuccessSuccessSuccess")
     except KeyError:
         logger.warning(
             "Twilio credentials are not set. Fallback to a free STUN server from Google."
@@ -24,6 +25,7 @@ def get_ice_servers():
     try:
         client = Client(account_sid, auth_token)
         token = client.tokens.create()
+        print("SuccessSuccessSuccessSuccess2")
         return token.ice_servers
     except Exception as e:
         logger.error(f"Failed to retrieve ICE servers from Twilio: {str(e)}")
