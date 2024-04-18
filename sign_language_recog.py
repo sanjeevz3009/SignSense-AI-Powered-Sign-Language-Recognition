@@ -223,17 +223,17 @@ class HolisticTransformer(VideoTransformerBase):
             min_detection_confidence=0.5, min_tracking_confidence=0.5
         )
 
-    def recv(self, frame):
-        image = frame.to_ndarray(format="bgr24")
+    # def recv(self, frame):
+    #     image = frame.to_ndarray(format="bgr24")
 
-        # Make detections
-        image, results = mediapipe_detection(image, self.holistic)
-        print(results)
+    #     # Make detections
+    #     # image, results = mediapipe_detection(image, self.holistic)
+    #     # print(results)
 
-        # Draw landmarks
-        image = draw_landmarks_custom(image, results)
+    #     # Draw landmarks
+    #     # image = draw_landmarks_custom(image, results)
 
-        return av.VideoFrame.from_ndarray(image, format="bgr24")
+    #     return av.VideoFrame.from_ndarray(image, format="bgr24")
 
 webrtc_ctx = webrtc_streamer(
     key="example", 
