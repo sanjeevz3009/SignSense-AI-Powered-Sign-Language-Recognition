@@ -27,6 +27,8 @@ MIN_DETECTION_CONFIDENCE = 0.5
 MIN_TRACKING_CONFIDENCE = 0.5
 WAIT_TIME_INITIAL = 3000
 WAIT_TIME_NORMAL = 1
+OPENCV_TEXT_COLOUR_YELLOW = (43, 255, 255)
+OPENCV_TEXT_COLOUR_RED = (0, 0, 255)
 
 
 def create_directories():
@@ -73,10 +75,10 @@ def draw_landmarks(image, results, gesture, sequence, frame_count):
     cv2.putText(
         image,
         f"Frames being collected for {gesture} video number {sequence}",
-        (15, 12),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.5,
-        (0, 0, 255),
+        (220, 700),
+        cv2.FONT_HERSHEY_DUPLEX,
+        1,
+        OPENCV_TEXT_COLOUR_YELLOW,
         1,
         cv2.LINE_AA,
     )
@@ -85,14 +87,14 @@ def draw_landmarks(image, results, gesture, sequence, frame_count):
         cv2.putText(
             image,
             "The program will now start to collect training data",
-            (120, 200),
-            cv2.FONT_HERSHEY_SIMPLEX,
+            (200, 200),
+            cv2.FONT_HERSHEY_DUPLEX,
             1,
-            (0, 255, 0),
+            OPENCV_TEXT_COLOUR_RED,
             4,
             cv2.LINE_AA,
         )
-        cv2.waitKey(WAIT_TIME_INITIAL)
+        cv2.waitKey(WAIT_TIME_NORMAL)
     else:
         cv2.waitKey(WAIT_TIME_NORMAL)
 

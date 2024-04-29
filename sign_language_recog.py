@@ -59,12 +59,6 @@ def main():
     gestures, updates predictions, updates recognized sentences, and
     displays results
     """
-    # Streamlit setup
-    st.title("Sign Language Recognition")
-    frame_placeholder = st.empty()
-    gesture_text = st.empty()
-    stop_button_pressed = st.button("Stop")
-
     # Variables
     sequence = []
     sentence = []
@@ -82,7 +76,7 @@ def main():
         min_detection_confidence=MIN_DETECTION_CONFIDENCE,
         min_tracking_confidence=MIN_TRACKING_CONFIDENCE,
     ) as holistic:
-        while capture.isOpened() and not stop_button_pressed:
+        while capture.isOpened():
             ret, frame = capture.read()
             if not ret:
                 st.write("The video feed has ended.")
@@ -195,10 +189,21 @@ def display_results(image, sentence, frame_placeholder, gesture_text):
     else:
         gesture_text.empty()
 
+# Streamlit setup
+st.title("Sign Language Recognition")
+frame_placeholder = st.empty()
+gesture_text = st.empty()
+stop_button_pressed = st.button("Stop")
+start_button_pressed = st.button("Start")
+
+if start_button_pressed:
+    main()
+elif stop_button_pressed:
+    st.write("The video feed has ended.")
 
 # This script sets up a real-time sign language recognition system
 # that captures video feed, processes frames for hand gesture detection,
 # predicts gestures using a pre-trained LSTM model,
 # and displays results interactively using Streamlit.
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
